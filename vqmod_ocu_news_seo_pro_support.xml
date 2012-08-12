@@ -1,0 +1,104 @@
+<modification>
+    <id>OCU News SEO PRO Support</id>
+    <version>1.5</version>
+    <vqmver>0.1</vqmver>
+    <author>OpenCart Ukrainian Community (www.opncart.ua) by Eugene Kuligin</author>
+
+    <file name="catalog/controller/common/seo_pro.php">
+
+       <operation>
+           <search position="before">
+               <![CDATA[
+                   if ($url[0] == 'category_id') {
+               ]]>
+           </search>
+           <add>
+               <![CDATA[
+                   if ($url[0] == 'news_id') {
+                       $this->request->get['news_id'] = $url[1];
+                   }
+                   if ($url[0] == 'news_category_id') {
+                       if (!isset($this->request->get['npath'])) {
+                           $this->request->get['npath'] = $url[1];
+                       } else {
+                           $this->request->get['npath'] .= '_' . $url[1];
+                       }
+                   }
+               ]]>
+           </add>
+       </operation>
+
+       <operation>
+           <search position="before">
+               <![CDATA[
+                   case 'path':
+               ]]>
+           </search>
+           <add>
+               <![CDATA[
+                   case 'npath':
+                       $categories = explode('_', $value);
+                       foreach ($categories as $category) {
+                           $queries[] = 'news_category_id=' . $category;
+                       }
+                       unset($data[$key]);
+                       break;
+                   case 'news_id':
+                       $queries[] = $key . '=' . $value;
+                       unset($data[$key]);
+                       $postfix = 1;
+                       break;
+               ]]>
+           </add>
+       </operation>
+
+       <operation>
+           <search position="before">
+               <![CDATA[
+                   } elseif (isset($this->request->get['path'])) {
+               ]]>
+           </search>
+           <add>
+               <![CDATA[
+                   }elseif (isset($this->request->get['npath'])) {
+                       if (isset($this->request->get['news_id'])) {
+                           $this->request->get['route'] = 'news/news';
+                       } else {
+                           $this->request->get['route'] = 'news/category';
+                       }
+                   }elseif (isset($this->request->get['news_id'])) {
+                       $this->request->get['route'] = 'news/news';
+               ]]>
+           </add>
+       </operation>
+
+       <operation>
+           <search position="after">
+               <![CDATA[
+                   if (!in_array($key, array('route',
+               ]]>
+           </search>
+           <add>
+               <![CDATA[
+                   'npath',
+                   'news_category_id',
+                   'news_id',
+               ]]>
+           </add>
+       </operation>
+
+       <operation>
+           <search position="replace">
+               <![CDATA[
+                   $get = array('path', 'product_id', 'manufacturer_id', 'category_id', 'information_id');
+               ]]>
+           </search>
+           <add>
+               <![CDATA[
+                   $get = array('path', 'product_id', 'manufacturer_id', 'category_id', 'information_id', 'news_category_id', 'npath', 'news_id');
+               ]]>
+           </add>
+       </operation>
+
+   </file>
+</modification>
