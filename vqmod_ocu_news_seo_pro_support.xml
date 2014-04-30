@@ -2,7 +2,7 @@
     <id>OCU News SEO PRO Support</id>
     <version>1.5</version>
     <vqmver>0.1</vqmver>
-    <author>OpenCart Ukrainian Community (www.opncart.ua) by Eugene Kuligin</author>
+    <author>OpenCart Ukrainian Community (www.opncart.ua) by Eugene Lifescale</author>
 
     <file name="catalog/controller/common/seo_pro.php">
 
